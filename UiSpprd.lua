@@ -975,6 +975,68 @@ function AddColorPicker(parent, Configs)
   end)
 end
 
+local function AddTextBox(parent, Configs)
+    local Callback = Configs.Callback or function() end
+    local name = Configs.Name or "TextBox"
+    local Default = Configs.Default or "..."
+    local Placeholder = Configs.Placeholder or "Input"
+    
+    local Frame = Instance.new("Frame")
+    Frame.Name = "Frame"
+    Frame.Parent = parent
+    Frame.Size = UDim2.new(1, 0, 0, 30)
+    Frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    
+    local UICorner = Instance.new("UICorner")
+    UICorner.Parent = Frame
+    
+    local UIStroke = Instance.new("UIStroke")
+    UIStroke.Parent = Frame
+    UIStroke.Color = Color3.fromRGB(255, 0, 0)
+    UIStroke.Thickness = 1
+    
+    local TextLabel = Instance.new("TextLabel")
+    TextLabel.Name = "Text"
+    TextLabel.Parent = Frame
+    TextLabel.Size = UDim2.new(1, -10, 1, 0)
+    TextLabel.Position = UDim2.new(0, 10, 0, 0)
+    TextLabel.TextSize = 14
+    TextLabel.TextColor3 = Color3.fromRGB(240, 240, 240)
+    TextLabel.TextXAlignment = "Left"
+    TextLabel.Text = name
+    TextLabel.Font = Enum.Font.FredokaOne
+    TextLabel.BackgroundTransparency = 1
+    
+    local TextBox = Instance.new("TextBox")
+    TextBox.Name = "TextBox"
+    TextBox.Parent = Frame
+    TextBox.Size = UDim2.new(0, 50, 1, -10)
+    TextBox.Position = UDim2.new(1, -55, 0, 5)
+    TextBox.ClearTextOnFocus = false
+    TextBox.BackgroundTransparency = 1
+    TextBox.Text = Default
+    TextBox.TextColor3 = Color3.fromRGB(240, 240, 240)
+    TextBox.Font = Enum.Font.FredokaOne
+    TextBox.PlaceholderText = Placeholder
+    TextBox.TextScaled = true
+    
+    local TextBoxCorner = Instance.new("UICorner")
+    TextBoxCorner.Parent = TextBox
+    
+    local TextBoxStroke = Instance.new("UIStroke")
+    TextBoxStroke.Parent = TextBox
+    TextBoxStroke.Color = Color3.fromRGB(255, 0, 0)
+    TextBoxStroke.Thickness = 1
+    
+    Callback(Default)
+    
+    TextBox.FocusLost:Connect(function()
+        Callback(TextBox.Text)
+    end)
+    
+    return TextBox
+end
+
 function AddLabel(parent, Configs)
   local name = Configs[1] or "Label"
   local Frame = SetConfigs(Create("Frame", "Frame", parent), {
