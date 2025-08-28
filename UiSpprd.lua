@@ -975,6 +975,53 @@ function AddColorPicker(parent, Configs)
   end)
 end
 
+function AddDiscordButton(parent, Configs)
+    local discordLink = Configs.Link or "https://discord.gg/your-invite" -- << ضع رابط سيرفرك هنا
+    local name = Configs.Name or "Discord"
+
+    local TextButton = SetConfigs(Create("TextButton", "Frame", parent), {
+        Size = UDim2.new(1, 0, 0, Buttons_Hub.Size),
+        BackgroundColor3 = Configs_HUB.Hub,
+        Text = ""
+    })
+    Stroke(TextButton)
+    Corner(TextButton)
+
+    local TextLabel = SetConfigs(Create("TextLabel", "Text", TextButton), {
+        Size = UDim2.new(1, -10, 1, 0),
+        Position = UDim2.new(0, 10, 0, 0),
+        TextSize = Buttons_Hub.TextSize,
+        TextColor3 = Configs_HUB.TextColor,
+        TextXAlignment = "Left",
+        Text = name,
+        Font = Configs_HUB.Font,
+        BackgroundTransparency = 1
+    })
+
+    local ImageLabel = SetConfigs(Create("ImageLabel", "Image", TextButton), {
+        Image = "http://www.roblox.com/asset/?id=12058969086", 
+        Size = UDim2.new(0, 22, 0, 22),
+        Position = UDim2.new(1, -31, 0, 4),
+        BackgroundTransparency = 1
+    })
+
+    TextButton.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(discordLink)
+            MakeNotifi({
+                Title = "Discord",
+                Text = "Succeeded",
+                Time = 5
+            })
+        else
+            MakeNotifi({
+                Title = "Error",
+                Text = "nothing",
+                Time = 5
+            })
+        end
+    end)
+end
 function AddTextBox(parent, Configs)
     local Callback = Configs.Callback or function() end
     local name = Configs.Name or "TextBox"
@@ -1078,43 +1125,6 @@ function AddParagraph(parent, Configs)
   })
 end
 
-local Players = game:GetService("Players")
-local localPlayer = Players.LocalPlayer
-
-local MenuInfo = Menu:FindFirstChild("MenuInfo") 
-if MenuInfo then
-
-    MenuInfo:ClearAllChildren()
-
-    local playerImage = SetConfigs(Create("ImageLabel", "PlayerImage", MenuInfo), {
-        Size = UDim2.new(0, 45, 0, 45), 
-        Position = UDim2.new(0, 5, 0.5, 0), 
-        AnchorPoint = Vector2.new(0, 0.5),
-        BackgroundTransparency = 1,
-    })
-    Corner(playerImage, UDim.new(1, 0)) 
-    Stroke(playerImage) 
-
-    local playerName = SetConfigs(Create("TextLabel", "PlayerName", MenuInfo), {
-        Size = UDim2.new(1, -55, 1, 0), 
-        Position = UDim2.new(0, 55, 0, 0), 
-        Font = Configs_HUB.Font,
-        Text = localPlayer.Name, 
-        TextSize = 16,
-        TextColor3 = Configs_HUB.TextColor,
-        TextXAlignment = "Left",
-        BackgroundTransparency = 1,
-    })
-
-    local userId = localPlayer.UserId
-    local thumbType = Enum.ThumbnailType.HeadShot
-    local thumbSize = Enum.ThumbnailSize.Size420x420
-    local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
-    
-    if isReady then
-        playerImage.Image = content
-    end
-end
 function AddTextBox(parent, Configs)
   local Callback = Configs.Callback or function() end
   local name = Configs.Name or "TextBox"
