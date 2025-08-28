@@ -1078,6 +1078,43 @@ function AddParagraph(parent, Configs)
   })
 end
 
+local Players = game:GetService("Players")
+local localPlayer = Players.LocalPlayer
+
+local MenuInfo = Menu:FindFirstChild("MenuInfo") 
+if MenuInfo then
+
+    MenuInfo:ClearAllChildren()
+
+    local playerImage = SetConfigs(Create("ImageLabel", "PlayerImage", MenuInfo), {
+        Size = UDim2.new(0, 45, 0, 45), 
+        Position = UDim2.new(0, 5, 0.5, 0), 
+        AnchorPoint = Vector2.new(0, 0.5),
+        BackgroundTransparency = 1,
+    })
+    Corner(playerImage, UDim.new(1, 0)) 
+    Stroke(playerImage) 
+
+    local playerName = SetConfigs(Create("TextLabel", "PlayerName", MenuInfo), {
+        Size = UDim2.new(1, -55, 1, 0), 
+        Position = UDim2.new(0, 55, 0, 0), 
+        Font = Configs_HUB.Font,
+        Text = localPlayer.Name, 
+        TextSize = 16,
+        TextColor3 = Configs_HUB.TextColor,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1,
+    })
+
+    local userId = localPlayer.UserId
+    local thumbType = Enum.ThumbnailType.HeadShot
+    local thumbSize = Enum.ThumbnailSize.Size420x420
+    local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+    
+    if isReady then
+        playerImage.Image = content
+    end
+end
 function AddTextBox(parent, Configs)
   local Callback = Configs.Callback or function() end
   local name = Configs.Name or "TextBox"
