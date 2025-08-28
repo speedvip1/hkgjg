@@ -203,7 +203,7 @@ end
 local Credits = SetConfigs(Create("TextLabel", "Credits", Menu), {
   Size = UDim2.new(1, 0, 1, 0),
   Position = UDim2.new(0, 10, 0, 0),
-  Text = "by : redz9999",
+  Text = "by : يوسف",
   BackgroundTransparency = 1,
   TextColor3 = Configs_HUB.TextColor,
   Font = Configs_HUB.Font,
