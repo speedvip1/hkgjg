@@ -991,7 +991,6 @@ function MinimizeButton(Configs)
     local useCorner = Configs.Corner == nil and true or Configs.Corner
     local useStroke = Configs.Stroke == nil and true or Configs.Stroke
     local strokeColor = Configs.StrokeColor or color
-    local url = Configs.Url or nil 
 
     local Button = SetConfigs(Create("ImageButton", "MinimizeButton", ScreenGui), {
         Size = UDim2.new(0, size[1], 0, size[2]),
@@ -1014,16 +1013,11 @@ function MinimizeButton(Configs)
     end
 
     Button.MouseButton1Click:Connect(function()
-        if url then
-            game:GetService("GuiService"):OpenBrowserWindow(url)
-        else
-            Menu.Visible = not Menu.Visible
-        end
+        Menu.Visible = not Menu.Visible
     end)
 
     return Button
 end
-
 
 function AddGameImage(parent, Configs)
     local gameUrl = Configs.Url or "https://www.roblox.com/games/920587237/Adopt-Me"
