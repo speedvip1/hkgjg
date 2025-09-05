@@ -983,6 +983,40 @@ function AddColorPicker(parent, Configs)
     end
   end)
 end
+function MinimizeButton(Configs)
+    local image = Configs.Image or "rbxassetid://6031090990"
+    local size = Configs.Size or {40, 40}
+    local color = Configs.Color or Configs_HUB.Stroke
+    local useCorner = Configs.Corner == nil and true or Configs.Corner
+    local useStroke = Configs.Stroke == nil and true or Configs.Stroke
+    local strokeColor = Configs.StrokeColor or color
+
+    local Button = SetConfigs(Create("ImageButton", "MinimizeButton", ScreenGui), {
+        Size = UDim2.new(0, size[1], 0, size[2]),
+        Position = UDim2.new(0, 20, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5),
+        Image = image,
+        ImageColor3 = color,
+        BackgroundColor3 = Configs_HUB.Hub,
+        BackgroundTransparency = 0.4,
+        Draggable = true,
+        Active = true
+    })
+
+    if useCorner then
+        Corner(Button, UDim.new(1, 0))
+    end
+
+    if useStroke then
+        Stroke(Button, strokeColor)
+    end
+
+    Button.MouseButton1Click:Connect(function()
+        Menu.Visible = not Menu.Visible
+    end)
+
+    return Button
+end
 
 function AddGameImage(parent, Configs)
     local gameUrl = Configs.Url or "https://www.roblox.com/games/920587237/Adopt-Me"
