@@ -291,12 +291,12 @@ MinimizeBtn.MouseButton1Click:Connect(function()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 35)})tween:Play()tween.Completed:Wait()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, Title.TextBounds.X + 120, 0, 35)})tween:Play()tween.Completed:Wait()
     Minimize = true
-    MinimizeBtn.Text = "-"
+    MinimizeBtn.Text = "+"
   else
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 35)})tween:Play()tween.Completed:Wait()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 270)})tween:Play()tween.Completed:Wait()
     Minimize = false
-    MinimizeBtn.Text = "+"
+    MinimizeBtn.Text = "-"
     local Containers = Menu:FindFirstChild("Containers")
     if Containers then
       Containers.Visible = true
