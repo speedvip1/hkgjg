@@ -266,7 +266,7 @@ end)
 local MinimizeBtn = SetConfigs(Create("TextButton", "Minimize BTN", TopBar), {
   Size = UDim2.new(0, TopBar.Size.Y.Offset, 0, TopBar.Size.Y.Offset),
   Position = UDim2.new(1, -80, 0, -2.5),
-  Text = "◇",
+  Text = "+",
   TextSize = 30,
   TextColor3 = Color3.fromRGB(240, 240, 240),
   BackgroundTransparency = 1,
@@ -291,12 +291,12 @@ MinimizeBtn.MouseButton1Click:Connect(function()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 35)})tween:Play()tween.Completed:Wait()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, Title.TextBounds.X + 120, 0, 35)})tween:Play()tween.Completed:Wait()
     Minimize = true
-    MinimizeBtn.Text = "◆"
+    MinimizeBtn.Text = "-"
   else
     local tween = TweenService:Create(Menu, TweenInfo.new(0.3, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 35)})tween:Play()tween.Completed:Wait()
     local tween = TweenService:Create(Menu, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(0, 500, 0, 270)})tween:Play()tween.Completed:Wait()
     Minimize = false
-    MinimizeBtn.Text = "◇"
+    MinimizeBtn.Text = "+"
     local Containers = Menu:FindFirstChild("Containers")
     if Containers then
       Containers.Visible = true
@@ -725,7 +725,7 @@ function AddSection(parent, Configs)
   local TextLabel = SetConfigs(Create("TextLabel", "Text", TextButton), {
     Size = UDim2.new(1, -10, 0, 20),
     TextSize = 15,
-    TextColor3 = Configs_HUB.DarkText,
+    TextColor3 = Color3.fromRGB(0, 255, 0),
     TextXAlignment = "Left",
     Text = name,
     Font = Configs_HUB.Font,
@@ -1045,6 +1045,83 @@ function AddDiscordInvite(parent, Configs)
         
         local originalText = JoinButton.Text
         JoinButton.Text = "Copied!"
+        task.wait(3)
+        JoinButton.Text = originalText
+        ClickDelay = false
+    end)
+
+    return InviteHolder
+end
+
+function AddTelegramInvite(parent, Configs)
+    local Title = Configs.Title or "Telegram Shannel"
+    local Desc = Configs.Desc or "Click to join our community!"
+    local Logo = Configs.Logo or "rbxassetid://3919948894"
+    local Invite = Configs.Invite or "https://t.me/your-invite"
+
+    local InviteHolder = SetConfigs(Create("Frame", "TelegramInvite", parent), {
+        Size = UDim2.new(1, 0, 0, 75),
+        BackgroundColor3 = Configs_HUB.Hub,
+        BackgroundTransparency = 0.5
+    })
+    Corner(InviteHolder)
+    Stroke(InviteHolder)
+
+    local ImageLabel = SetConfigs(Create("ImageLabel", "Logo", InviteHolder), {
+        Size = UDim2.new(0, 45, 0, 45),
+        Position = UDim2.new(0, 15, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5),
+        Image = Logo,
+        BackgroundTransparency = 1
+    })
+    Corner(ImageLabel, UDim.new(1, 0))
+
+    local LTitle = SetConfigs(Create("TextLabel", "ChannelTitle", InviteHolder), {
+        Size = UDim2.new(1, -150, 0, 20),
+        Position = UDim2.new(0, 70, 0, 10),
+        Font = Configs_HUB.Font,
+        TextColor3 = Configs_HUB.TextColor,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1,
+        TextSize = 16,
+        Text = Title
+    })
+
+    local LDesc = SetConfigs(Create("TextLabel", "ChannelDesc", InviteHolder), {
+        Size = UDim2.new(1, -150, 0, 30),
+        Position = UDim2.new(0, 70, 0, 35),
+        Font = Configs_HUB.Font,
+        TextColor3 = Configs_HUB.DarkText,
+        TextXAlignment = "Left",
+        BackgroundTransparency = 1,
+        TextSize = 12,
+        Text = Desc,
+        TextWrapped = true
+    })
+
+    local JoinButton = SetConfigs(Create("TextButton", "JoinButton", InviteHolder), {
+        Size = UDim2.new(0, 60, 0, 30),
+        Position = UDim2.new(1, -45, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Text = "Join",
+        Font = Configs_HUB.Font,
+        TextSize = 14,
+        TextColor3 = Color3.fromRGB(255, 255, 255),
+        BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+    })
+    Corner(JoinButton)
+
+    local ClickDelay = false
+    JoinButton.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(Invite)
+        end
+        
+        if ClickDelay then return end
+        ClickDelay = true
+        
+        local originalText = JoinButton.Text
+        JoinButton.Text = "Copied"
         task.wait(3)
         JoinButton.Text = originalText
         ClickDelay = false
