@@ -975,6 +975,39 @@ function AddColorPicker(parent, Configs)
   end)
 end
 
+function AddGameImage(parent, Configs)
+    local imageId = Configs.Image or "rbxassetid://0"
+    local copyText = Configs.CopyText or ""
+    local imageSize = Configs.Size or UDim2.new(1, 0, 0, 150)
+
+    local ImageButton = SetConfigs(Create("ImageButton", "GameImage", parent), {
+        Size = imageSize,
+        Image = imageId,
+        BackgroundColor3 = Configs_HUB.Hub,
+        BackgroundTransparency = 0.5,
+        ScaleType = Enum.ScaleType.Crop
+    })
+    Stroke(ImageButton)
+    Corner(ImageButton)
+
+    local ClickDelay = false
+    ImageButton.MouseButton1Click:Connect(function()
+        if setclipboard then
+            setclipboard(copyText)
+        end
+
+        if ClickDelay then return end
+        ClickDelay = true
+
+        local originalColor = ImageButton.ImageColor3
+        ImageButton.ImageColor3 = Color3.fromRGB(100, 255, 100)
+        task.wait(0.2)
+        ImageButton.ImageColor3 = originalColor
+        ClickDelay = false
+    end)
+
+    return ImageButton
+end
 
 function AddDiscordInvite(parent, Configs)
     local Title = Configs.Title or "Discord Server"
