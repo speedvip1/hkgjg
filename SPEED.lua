@@ -369,11 +369,11 @@ local Containers = SetConfigs(Create("Frame", "Containers", Menu), {
   BackgroundTransparency = 1
 })
 
-local ActiveTabs = {} 
+local ActiveTabs = {}
 
 function NewTab(Configs)
     local TName = Configs.Name or "Tab"
-    local TIcon = Configs.Icon or nil 
+    local TIcon = Configs.Icon or nil
 
     local isFirstTab = #ActiveTabs == 0
 
@@ -428,16 +428,20 @@ function NewTab(Configs)
         ScrollBarThickness = 4,
         AutomaticCanvasSize = "Y",
         Visible = isFirstTab,
-        Parent = isFirstTab and Containers or nil 
+        Parent = isFirstTab and Containers or nil
     })
     SetConfigs(Create("UIPadding", "Padding", Container), {PaddingLeft=UDim.new(0,10), PaddingRight=UDim.new(0,10), PaddingTop=UDim.new(0,10), PaddingBottom=UDim.new(0,10)})
     SetConfigs(Create("UIListLayout", "ListLayout", Container), {Padding = UDim.new(0, 5)})
 
-    local function ActivateTab()
-        if Container.Parent == Containers then return end -- لا تفعل شيئًا إذا كانت نشطة بالفعل
+    local tabObject = {}
 
-        for _, tab in ipairs(ActiveTabs) do
-            tab:Disable()
+    local function ActivateTab()
+        if Container.Parent == Containers then return end
+
+        for _, otherTab in ipairs(ActiveTabs) do
+            if otherTab ~= tabObject then
+                otherTab:Disable()
+            end
         end
         
         Container.Parent = Containers
@@ -455,12 +459,11 @@ function NewTab(Configs)
 
     TabButton.MouseButton1Click:Connect(ActivateTab)
 
-    local tabObject = {
-        Button = TabButton,
-        Container = Container,
-        Enable = ActivateTab,
-        Disable = DisableTab
-    }
+    tabObject.Button = TabButton
+    tabObject.Container = Container
+    tabObject.Enable = ActivateTab
+    tabObject.Disable = DisableTab
+    
     table.insert(ActiveTabs, tabObject)
 
     return Container
