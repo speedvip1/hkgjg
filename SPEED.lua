@@ -976,24 +976,38 @@ function AddColorPicker(parent, Configs)
 end
 
 function AddGameImage(parent, Configs)
-    local imageId = Configs.Image or "rbxassetid://0"
+    local gameUrl = Configs.Url or "https://www.roblox.com/games/920587237/Adopt-Me"
     local copyText = Configs.CopyText or ""
-    local imageSize = Configs.Size or UDim2.new(1, 0, 0, 150)
+    local imageSize = Configs.Size or UDim2.new(1, 0, 0, 120)
+
+    local gameId = string.match(gameUrl, "/games/(%d+)/")
+
+    if not gameId then
+        warn("Invalid Roblox game URL:", gameUrl)
+        gameId = "0" 
+    end
+    
+    local imageUrl = "https://www.roblox.com/asset-thumbnail/image?assetId=" .. gameId .. "&width=420&height=420&format=png"
 
     local ImageButton = SetConfigs(Create("ImageButton", "GameImage", parent), {
         Size = imageSize,
-        Image = imageId,
+        Image = imageUrl, 
         BackgroundColor3 = Configs_HUB.Hub,
         BackgroundTransparency = 0.5,
-        ScaleType = Enum.ScaleType.Crop
+        ScaleType = Enum.ScaleType.Crop 
     })
     Stroke(ImageButton)
     Corner(ImageButton)
 
     local ClickDelay = false
     ImageButton.MouseButton1Click:Connect(function()
+        local textToCopy = copyText
+        if textToCopy == "" then
+            textToCopy = gameId
+        end
+
         if setclipboard then
-            setclipboard(copyText)
+            setclipboard(textToCopy)
         end
 
         if ClickDelay then return end
