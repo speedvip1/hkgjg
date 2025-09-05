@@ -1107,7 +1107,7 @@ function AddTelegramInvite(parent, Configs)
         Font = Configs_HUB.Font,
         TextSize = 14,
         TextColor3 = Color3.fromRGB(255, 255, 255),
-        BackgroundColor3 = Color3.fromRGB(88, 101, 242)
+        BackgroundColor3 = Color3.fromRGB(0, 136, 204)
     })
     Corner(JoinButton)
 
