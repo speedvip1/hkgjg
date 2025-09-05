@@ -564,154 +564,154 @@ function AddButton(parent, Configs)
 end
 
 function AddDropdown(parent, Configs)
-  local Callback = Configs.Callback or function() end
-  local name = Configs.Name or "Dropdown"
-  local Options = Configs.Options or {"1", "2"}
-  local Default = Configs.Default or "1"
-  
-  local TextButton = SetConfigs(Create("TextButton", "Frame", parent), {
-    Size = UDim2.new(1, 0, 0, Buttons_Hub.Size),
-    BackgroundColor3 = Configs_HUB.Hub,
-    AutoButtonColor = false,
-    Text = ""
-  })Stroke(TextButton)Corner(TextButton)
-  
-  local TextLabel = SetConfigs(Create("TextLabel", "Text", TextButton), {
-    Size = UDim2.new(1, -10, 0, Buttons_Hub.Size),
-    Position = UDim2.new(0, 10, 0, 0),
-    TextSize = Buttons_Hub.TextSize,
-    TextColor3 = Configs_HUB.TextColor,
-    TextXAlignment = "Left",
-    Text = name,
-    Font = Configs_HUB.Font,
-    BackgroundTransparency = 1
-  })
-  
-  local default = SetConfigs(Create("TextLabel", "Default", TextButton), {
-    Size = UDim2.new(1, -30, 0, 20),
-    Position = UDim2.new(0, 0, 0, 12),
-    TextXAlignment = "Right",
-    TextColor3 = Configs_HUB.DarkText,
-    BackgroundTransparency = 1,
-    Text = "...",
-    Font = Configs_HUB.Font,
-    TextSize = 14
-  })
-  
-  local A_1 = SetConfigs(Create("Frame", "...", TextButton), {
-    Size = UDim2.new(1, 0, 0, 0),
-    Position = UDim2.new(0, 0, 0, Buttons_Hub.Size + 5),
-    Visible = false
-  })Stroke(A_1)
-  
-  local ListDrop = SetConfigs(Create("ScrollingFrame", "ListDrop", TextButton), {
-    Size = UDim2.new(1, -4, 1, -tonumber(Buttons_Hub.Size + 5)),
-    Position = UDim2.new(0, 2, 1, 0),
-    AnchorPoint = Vector2.new(0, 1),
-    Visible = false,
-    BackgroundTransparency = 1,
-    BackgroundColor3 = Color3.fromRGB(100, 100, 100),
-    ScrollingDirection = "Y",
-    ElasticBehavior = "Never",
-    ScrollBarThickness = 0,
-    AutomaticCanvasSize = "Y",
-    CanvasSize = UDim2.new(0, 0, 0, 0)
-  })
-  
-  local Arrow = SetConfigs(Create("ImageLabel", "Arrow", TextButton), {
-    Image = "rbxassetid://6031090990",
-    Size = UDim2.new(0, Buttons_Hub.Size, 0, Buttons_Hub.Size),
-    Position = UDim2.new(1, -30, 0, 0),
-    BackgroundTransparency = 1
-  })
-  
-  local Padding = SetConfigs(Create("UIPadding", "Padding", ListDrop), {
-    PaddingLeft = UDim.new(0, 10),
-    PaddingRight = UDim.new(0, 10),
-    PaddingTop = UDim.new(0, 5),
-    PaddingBottom = UDim.new(0, 5)
-  })
-  
-  local ListLayout = SetConfigs(Create("UIListLayout", "ListLayout", ListDrop), {
-    Padding = UDim.new(0, 5)
-  })
-  
-  local function AddOption(name)
-    local NewOption = SetConfigs(Create("TextButton", "Option", ListDrop), {
-      Size = UDim2.new(1, 0, 0, 20),
-      Text = name,
-      TextSize = 15,
-      Font = Configs_HUB.Font,
-      TextColor3 = Configs_HUB.DarkText,
-      BackgroundTransparency = 0.5,
-      TextXAlignment = "Left",
-      BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-    })Corner(NewOption)
-    
-    if NewOption.Text == Default then
-      NewOption.TextColor3 = Configs_HUB.TextColor
-      NewOption.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-      Callback(Default)
-      default.Text = Default
-    end
-    
-    NewOption.MouseButton1Click:Connect(function()
-      for _,v in pairs(ListDrop:GetChildren()) do
-        if v.Name == "Option" then
-          v.TextColor3 = Configs_HUB.DarkText
-          v.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    local name = Configs.Name or "Dropdown"
+    local DOptions = Configs.Options or {"Option 1", "Option 2"}
+    local MultiSelect = Configs.MultiSelect or false
+    local Callback = Configs.Callback or function() end
+
+    local IsMinimized = false
+    local Options = {}
+    local Selected = MultiSelect and {} or nil
+
+    local Button = SetConfigs(Create("TextButton", "DropdownFrame", parent), {
+        Size = UDim2.new(1, 0, 0, Buttons_Hub.Size),
+        BackgroundColor3 = Configs_HUB.Hub,
+        AutoButtonColor = false,
+        Text = ""
+    })
+    Stroke(Button)
+    Corner(Button)
+
+    local TextLabel = SetConfigs(Create("TextLabel", "Text", Button), {
+        Size = UDim2.new(1, -35, 1, 0),
+        Position = UDim2.new(0, 10, 0, 0),
+        TextSize = Buttons_Hub.TextSize,
+        TextColor3 = Configs_HUB.TextColor,
+        TextXAlignment = "Left",
+        Text = name,
+        Font = Configs_HUB.Font,
+        BackgroundTransparency = 1
+    })
+
+    local Arrow = SetConfigs(Create("ImageLabel", "Arrow", Button), {
+        Image = "rbxassetid://6031090990",
+        Size = UDim2.new(0, 20, 0, 20),
+        Position = UDim2.new(1, -25, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        BackgroundTransparency = 1
+    })
+
+    local ScrollFrame = SetConfigs(Create("ScrollingFrame", "OptionsScroll", Button), {
+        Size = UDim2.new(1, 0, 0, 0),
+        Position = UDim2.new(0, 0, 1, 5),
+        BackgroundTransparency = 1,
+        BorderSizePixel = 0,
+        ClipsDescendants = true,
+        Visible = false,
+        CanvasSize = UDim2.new(0,0,0,0),
+        ScrollBarThickness = 4
+    })
+    local ListLayout = Create("UIListLayout", "ListLayout", ScrollFrame)
+    ListLayout.Padding = UDim.new(0, 2)
+    ListLayout.SortOrder = "LayoutOrder"
+
+    local function UpdateSelected()
+        for _, option in pairs(Options) do
+            local isSelected
+            if MultiSelect then
+                isSelected = Selected[option.Name]
+            else
+                isSelected = Selected == option.Value
+            end
+            option.Nodes.Check.Visible = isSelected
+            option.Nodes.Name.TextColor3 = isSelected and Configs_HUB.TextColor or Configs_HUB.DarkText
         end
-      end
-      Callback(NewOption.Text)
-      NewOption.TextColor3 = Configs_HUB.TextColor
-      NewOption.BackgroundColor3 = Color3.fromRGB(120, 120, 120)
-      default.Text = NewOption.Text
-    end)
-    ListDrop.CanvasSize = ListDrop.CanvasSize + UDim2.new(0, 0, 0, 25)
-  end
-  
-  for i = 1, #Options do
-    AddOption(Options[i])
-  end
-  
-  local DropOnOff = false
-  TextButton.MouseButton1Click:Connect(function()
-  local frameSize = UDim2.new(1, 0, 0, Buttons_Hub.Size)
-    for i,v in pairs(ListDrop:GetChildren()) do
-      if v.Name == "Option" and i <= 7 then
-        frameSize = frameSize + UDim2.new(0, 0, 0, 25)
-      end
     end
-    if DropOnOff == false then
-      DropOnOff = true
-      A_1.Visible = DropOnOff
-      ListDrop.Visible = DropOnOff
-      local tween1 = TweenService:Create(TextButton, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = frameSize})
-      local tween2 = TweenService:Create(Arrow, TweenInfo.new(0.2), {Rotation = 180})
-      tween1:Play()tween2:Play()
-    else
-      DropOnOff = false
-      local tween1 = TweenService:Create(TextButton, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {Size = UDim2.new(1, 0, 0, Buttons_Hub.Size)})
-      local tween2 = TweenService:Create(Arrow, TweenInfo.new(0.2), {Rotation = 0})
-      tween1:Play()tween2:Play()tween1.Completed:Wait()
-      A_1.Visible = DropOnOff
-      ListDrop.Visible = DropOnOff
+
+    local function CallbackSelected()
+        Callback(Selected)
     end
-  end)
-  ListDrop.CanvasSize = ListDrop.CanvasSize + UDim2.new(0, 0, 0, 10)
-  return ListDrop
+
+    local function Select(option)
+        if MultiSelect then
+            Selected[option.Name] = not Selected[option.Name]
+        else
+            Selected = option.Value
+        end
+        UpdateSelected()
+        CallbackSelected()
+    end
+
+    local function AddOption(value, index)
+        local name = tostring(index or value)
+        if Options[name] then return end
+
+        local optionData = {
+            Value = value,
+            Name = name,
+            Nodes = {}
+        }
+        Options[name] = optionData
+
+        local OptionButton = SetConfigs(Create("TextButton", name, ScrollFrame), {
+            Size = UDim2.new(1, 0, 0, 22),
+            BackgroundColor3 = Color3.fromRGB(30, 30, 30),
+            Text = "",
+            LayoutOrder = #ScrollFrame:GetChildren()
+        })
+        Corner(OptionButton)
+        optionData.Nodes.Button = OptionButton
+
+        local Check = SetConfigs(Create("Frame", "Check", OptionButton), {
+            Size = UDim2.new(0, 8, 0, 8),
+            Position = UDim2.new(0, 7, 0.5, 0),
+            AnchorPoint = Vector2.new(0.5, 0.5),
+            BackgroundColor3 = Configs_HUB.Stroke,
+            Visible = false
+        })
+        Corner(Check, UDim.new(1,0))
+        optionData.Nodes.Check = Check
+
+        local OptionName = SetConfigs(Create("TextLabel", "Name", OptionButton), {
+            Size = UDim2.new(1, -20, 1, 0),
+            Position = UDim2.new(0, 20, 0, 0),
+            Text = name,
+            Font = Configs_HUB.Font,
+            TextSize = 13,
+            TextColor3 = Configs_HUB.DarkText,
+            TextXAlignment = "Left",
+            BackgroundTransparency = 1
+        })
+        optionData.Nodes.Name = OptionName
+
+        OptionButton.MouseButton1Click:Connect(function() Select(optionData) end)
+    end
+
+    local function Minimize()
+        IsMinimized = not IsMinimized
+        ScrollFrame.Visible = IsMinimized
+        local count = #ScrollFrame:GetChildren()
+        local targetHeight = IsMinimized and math.min(count * 24, 120) or 0
+        
+        TweenService:Create(Button, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, Buttons_Hub.Size + targetHeight)}):Play()
+        TweenService:Create(ScrollFrame, TweenInfo.new(0.2), {Size = UDim2.new(1, 0, 0, targetHeight)}):Play()
+        TweenService:Create(Arrow, TweenInfo.new(0.2), {Rotation = IsMinimized and 180 or 0}):Play()
+    end
+
+    Button.MouseButton1Click:Connect(Minimize)
+
+    for i, v in pairs(DOptions) do
+        if type(i) == "string" then
+            AddOption(v, i)
+        else
+            AddOption(v)
+        end
+    end
+    UpdateSelected()
+
+    return Options
 end
 
-function RefreshDropdown(Dropdown, NewOptions)
-  for _,v in pairs(Dropdown:GetChildren()) do
-    if v.Name == "Option" then
-      v:Destroy()
-    end
-  end
-  for i = 1, #NewOptions do
-    AddOption(NewOptions[i])
-  end
-end
 
 function AddSection(parent, Configs)
   local name = Configs[1] or "Section"
