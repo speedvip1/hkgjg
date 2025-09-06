@@ -722,26 +722,6 @@ function RefreshDropdown(Dropdown, NewOptions)
   end
 end
 
-function AddSection(parent, Configs)
-  local name = Configs[1] or "Section"
-  
-  local TextButton = SetConfigs(Create("TextButton", "Frame", parent), {
-    Size = UDim2.new(1, 0, 0, 20),
-    BackgroundTransparency = 1,
-    Text = ""
-  })Corner(TextButton)
-  
-  local TextLabel = SetConfigs(Create("TextLabel", "Text", TextButton), {
-    Size = UDim2.new(1, -10, 0, 20),
-    TextSize = 15,
-    TextColor3 = Color3.fromRGB(0, 255, 0),
-    TextXAlignment = "Left",
-    Text = name,
-    Font = Configs_HUB.Font,
-    BackgroundTransparency = 1
-  })
-end
-
 function AddSlider(parent, Configs)
   local name = Configs.Name or "Slider"
   local minvalue = Configs.MinValue or 10
@@ -1065,6 +1045,47 @@ function AddGameImage(parent, Configs)
     end)
 
     return ImageButton
+end
+function AddSection(parent, name)
+    if type(name) == "table" then
+        name = name.Name or "Section"
+    end
+    
+    name = name or "Section"
+
+    local Frame = SetConfigs(Create("Frame", "SectionFrame", parent), {
+        Size = UDim2.new(1, 0, 0, 25),
+        BackgroundTransparency = 1 
+    })
+
+    local Line1 = SetConfigs(Create("Frame", "Line", Frame), {
+        Size = UDim2.new(0.35, 0, 0, 2),
+        Position = UDim2.new(0, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5),
+        BackgroundColor3 = Configs_HUB.Stroke
+    })
+    Corner(Line1)
+
+    local TextLabel = SetConfigs(Create("TextLabel", "Text", Frame), {
+        Size = UDim2.new(0.3, 0, 1, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Text = name,
+        Font = Configs_HUB.Font,
+        TextSize = 14,
+        TextColor3 = Configs_HUB.DarkText,
+        BackgroundTransparency = 1
+    })
+
+    local Line2 = SetConfigs(Create("Frame", "Line", Frame), {
+        Size = UDim2.new(0.35, 0, 0, 2),
+        Position = UDim2.new(1, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(1, 0.5),
+        BackgroundColor3 = Configs_HUB.Stroke
+    })
+    Corner(Line2)
+
+    return Frame
 end
 
 function AddDiscordInvite(parent, Configs)
