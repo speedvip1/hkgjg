@@ -1087,7 +1087,47 @@ function AddSection(parent, name)
 
     return Frame
 end
+function AddSection(parent, name)
+    if type(name) == "table" then
+        name = name.Name or "Section"
+    end
+    
+    name = name or "Section"
 
+    local Frame = SetConfigs(Create("Frame", "SectionFrame", parent), {
+        Size = UDim2.new(1, 0, 0, 25),
+        BackgroundTransparency = 1 
+    })
+
+    local Line1 = SetConfigs(Create("Frame", "Line", Frame), {
+        Size = UDim2.new(0.35, 0, 0, 2),
+        Position = UDim2.new(0, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0, 0.5),
+        BackgroundColor3 = Configs_HUB.Stroke
+    })
+    Corner(Line1)
+
+    local TextLabel = SetConfigs(Create("TextLabel", "Text", Frame), {
+        Size = UDim2.new(0.3, 0, 1, 0),
+        Position = UDim2.new(0.5, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(0.5, 0.5),
+        Text = name,
+        Font = Configs_HUB.Font,
+        TextSize = 14,
+        TextColor3 = Configs_HUB.DarkText,
+        BackgroundTransparency = 1
+    })
+
+    local Line2 = SetConfigs(Create("Frame", "Line", Frame), {
+        Size = UDim2.new(0.35, 0, 0, 2),
+        Position = UDim2.new(1, 0, 0.5, 0),
+        AnchorPoint = Vector2.new(1, 0.5),
+        BackgroundColor3 = Configs_HUB.Stroke
+    })
+    Corner(Line2)
+
+    return Frame
+end
 function AddDiscordInvite(parent, Configs)
     local Title = Configs.Title or "Discord Server"
     local Desc = Configs.Desc or "Click to join our community!"
